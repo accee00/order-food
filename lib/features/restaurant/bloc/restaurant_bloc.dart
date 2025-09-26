@@ -19,7 +19,8 @@ class RestaurantBloc extends Bloc<RestaurantEvent, RestaurantState> {
   ) async {
     emit(RestaurantLoading());
     try {
-      final restaurants = await _repository.getRestaurants();
+      final List<Restaurant> restaurants = await _repository.getRestaurants();
+      print(restaurants);
       emit(RestaurantLoaded(restaurants));
     } catch (e) {
       emit(RestaurantError('Failed to load restaurants: ${e.toString()}'));
@@ -32,7 +33,9 @@ class RestaurantBloc extends Bloc<RestaurantEvent, RestaurantState> {
   ) async {
     emit(RestaurantLoading());
     try {
-      final restaurants = await _repository.searchRestaurants(event.query);
+      final List<Restaurant> restaurants = await _repository.searchRestaurants(
+        event.query,
+      );
       emit(RestaurantLoaded(restaurants));
     } catch (e) {
       emit(RestaurantError('Failed to search restaurants: ${e.toString()}'));
@@ -45,7 +48,7 @@ class RestaurantBloc extends Bloc<RestaurantEvent, RestaurantState> {
   ) async {
     emit(RestaurantLoading());
     try {
-      final restaurant = await _repository.getRestaurantById(
+      final Restaurant? restaurant = await _repository.getRestaurantById(
         event.restaurantId,
       );
       if (restaurant != null) {
