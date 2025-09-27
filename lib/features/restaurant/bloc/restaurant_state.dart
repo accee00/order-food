@@ -1,39 +1,40 @@
 part of 'restaurant_bloc.dart';
 
 sealed class RestaurantState extends Equatable {
-  const RestaurantState();
-
-  @override
-  List<Object> get props => [];
-}
-
-class RestaurantInitial extends RestaurantState {}
-
-class RestaurantLoading extends RestaurantState {}
-
-class RestaurantLoaded extends RestaurantState {
   final List<Restaurant> restaurants;
 
-  const RestaurantLoaded(this.restaurants);
+  const RestaurantState(this.restaurants);
 
   @override
   List<Object> get props => [restaurants];
 }
 
+class RestaurantInitial extends RestaurantState {
+  const RestaurantInitial(super.restaurants);
+}
+
+class RestaurantLoading extends RestaurantState {
+  const RestaurantLoading(super.restaurants);
+}
+
+class RestaurantLoaded extends RestaurantState {
+  const RestaurantLoaded(super.restaurants);
+}
+
 class RestaurantDetailLoaded extends RestaurantState {
   final Restaurant restaurant;
 
-  const RestaurantDetailLoaded(this.restaurant);
+  const RestaurantDetailLoaded(this.restaurant, super.restaurants);
 
   @override
-  List<Object> get props => [restaurant];
+  List<Object> get props => [restaurant, ...super.props];
 }
 
 class RestaurantError extends RestaurantState {
   final String message;
 
-  const RestaurantError(this.message);
+  const RestaurantError(this.message, super.restaurants);
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [message, ...super.props];
 }

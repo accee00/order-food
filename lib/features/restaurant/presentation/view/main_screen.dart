@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter_glass_morphism/flutter_glass_morphism.dart';
+import 'package:order_food/core/bloc/app_bloc.dart';
+import 'package:order_food/core/extension/build_extension.dart';
 import 'dart:io';
 
 import 'package:order_food/features/cart/bloc/cart_bloc.dart';
@@ -46,10 +48,14 @@ class _MainAppScreenState extends State<MainAppScreen> {
     );
   }
 
+  void _toggleTheme() {
+    context.read<AppBloc>().add(ToggleTheme());
+  }
+
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = context.colorScheme;
+    final textTheme = context.textTheme;
     final isAndroid = !kIsWeb && Platform.isAndroid;
 
     return Scaffold(
@@ -65,7 +71,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
             context.read<OrderBloc>().add(LoadOrderHistory());
           }
         },
-        children: const [HomeScreen(), OrderHistoryView(), FavoritesTab()],
+        children: const [HomeScreen(), OrderHistoryView()],
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: isAndroid
@@ -81,6 +87,8 @@ class _MainAppScreenState extends State<MainAppScreen> {
     ColorScheme colorScheme,
     TextTheme textTheme,
   ) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return AppBar(
       elevation: 0,
       surfaceTintColor: Colors.transparent,
@@ -129,13 +137,19 @@ class _MainAppScreenState extends State<MainAppScreen> {
             borderRadius: BorderRadius.circular(12),
           ),
           child: IconButton(
-            onPressed: () {
-              // Handle notifications
-            },
-            icon: Icon(
-              Icons.notifications_outlined,
-              color: colorScheme.onSurfaceVariant,
+            onPressed: _toggleTheme,
+            icon: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              transitionBuilder: (child, animation) {
+                return RotationTransition(turns: animation, child: child);
+              },
+              child: Icon(
+                isDark ? Icons.light_mode_rounded : Icons.dark_mode_rounded,
+                key: ValueKey(isDark),
+                color: colorScheme.onSurfaceVariant,
+              ),
             ),
+            tooltip: isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode',
           ),
         ),
 
@@ -252,14 +266,6 @@ class _MainAppScreenState extends State<MainAppScreen> {
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              GButton(
-                icon: Icons.favorite_rounded,
-                text: 'Favorites',
-                textStyle: textTheme.labelMedium?.copyWith(
-                  color: colorScheme.onPrimary,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
             ],
           ),
         ),
@@ -288,13 +294,6 @@ class _MainAppScreenState extends State<MainAppScreen> {
                 icon: Icons.history_rounded,
                 label: 'Orders',
                 index: 1,
-                colorScheme: colorScheme,
-                textTheme: textTheme,
-              ),
-              _buildIOSNavItem(
-                icon: Icons.favorite_rounded,
-                label: 'Favorites',
-                index: 2,
                 colorScheme: colorScheme,
                 textTheme: textTheme,
               ),
@@ -375,72 +374,5 @@ class _MainAppScreenState extends State<MainAppScreen> {
       default:
         return 'Discover delicious food';
     }
-  }
-}
-
-class OrderHistoryTab extends StatelessWidget {
-  const OrderHistoryTab({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.history_rounded, size: 64, color: colorScheme.primary),
-          const SizedBox(height: 16),
-          Text(
-            'Order History',
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              color: colorScheme.onSurface,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Your past orders will appear here',
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: colorScheme.onSurfaceVariant,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// Favorites Tab
-class FavoritesTab extends StatelessWidget {
-  const FavoritesTab({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(Icons.favorite_rounded, size: 64, color: colorScheme.primary),
-          const SizedBox(height: 16),
-          Text(
-            'Favorites',
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              color: colorScheme.onSurface,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            'Your favorite restaurants will appear here',
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: colorScheme.onSurfaceVariant,
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }

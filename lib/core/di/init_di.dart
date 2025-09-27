@@ -2,7 +2,18 @@ part of 'di_imports.dart';
 
 GetIt serviceLocator = GetIt.instance;
 
-void initDi() {
+Future<void> initDi() async {
+  final HydratedStorage storage = await HydratedStorage.build(
+    storageDirectory: kIsWeb
+        ? HydratedStorageDirectory.web
+        : HydratedStorageDirectory(
+            (await getApplicationSupportDirectory()).path,
+          ),
+  );
+  HydratedBloc.storage = storage;
+
+  serviceLocator.registerFactory<AppBloc>(() => AppBloc());
+
   /// Repository Locator.
   serviceLocator
     ..registerLazySingleton<RestaurantRepository>(() => RestaurantRepository())

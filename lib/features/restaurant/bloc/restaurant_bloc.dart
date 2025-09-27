@@ -8,7 +8,7 @@ part 'restaurant_state.dart';
 
 class RestaurantBloc extends Bloc<RestaurantEvent, RestaurantState> {
   final RestaurantRepository _repository;
-  RestaurantBloc(this._repository) : super(RestaurantInitial()) {
+  RestaurantBloc(this._repository) : super(RestaurantInitial([])) {
     on<LoadRestaurants>(_onLoadRestaurants);
     on<SearchRestaurants>(_onSearchRestaurants);
     on<LoadRestaurantById>(_onLoadRestaurantById);
@@ -17,12 +17,17 @@ class RestaurantBloc extends Bloc<RestaurantEvent, RestaurantState> {
     LoadRestaurants event,
     Emitter<RestaurantState> emit,
   ) async {
-    emit(RestaurantLoading());
+    emit(RestaurantLoading(state.restaurants));
     try {
       final List<Restaurant> restaurants = await _repository.getRestaurants();
       emit(RestaurantLoaded(restaurants));
     } catch (e) {
-      emit(RestaurantError('Failed to load restaurants: ${e.toString()}'));
+      emit(
+        RestaurantError(
+          'Failed to load restaurants: ${e.toString()}',
+          state.restaurants,
+        ),
+      );
     }
   }
 
@@ -30,14 +35,19 @@ class RestaurantBloc extends Bloc<RestaurantEvent, RestaurantState> {
     SearchRestaurants event,
     Emitter<RestaurantState> emit,
   ) async {
-    emit(RestaurantLoading());
+    emit(RestaurantLoading(state.restaurants));
     try {
       final List<Restaurant> restaurants = await _repository.searchRestaurants(
         event.query,
       );
       emit(RestaurantLoaded(restaurants));
     } catch (e) {
-      emit(RestaurantError('Failed to search restaurants: ${e.toString()}'));
+      emit(
+        RestaurantError(
+          'Failed to search restaurants: ${e.toString()}',
+          state.restaurants,
+        ),
+      );
     }
   }
 
@@ -45,18 +55,23 @@ class RestaurantBloc extends Bloc<RestaurantEvent, RestaurantState> {
     LoadRestaurantById event,
     Emitter<RestaurantState> emit,
   ) async {
-    emit(RestaurantLoading());
+    emit(RestaurantLoading(state.restaurants));
     try {
       final Restaurant? restaurant = await _repository.getRestaurantById(
         event.restaurantId,
       );
       if (restaurant != null) {
-        emit(RestaurantDetailLoaded(restaurant));
+        emit(RestaurantDetailLoaded(restaurant, state.restaurants));
       } else {
-        emit(const RestaurantError('Restaurant not found'));
+        emit(const RestaurantError('Restaurant not found', []));
       }
     } catch (e) {
-      emit(RestaurantError('Failed to load restaurant: ${e.toString()}'));
+      emit(
+        RestaurantError(
+          'Failed to load restaurant: ${e.toString()}',
+          state.restaurants,
+        ),
+      );
     }
   }
 }

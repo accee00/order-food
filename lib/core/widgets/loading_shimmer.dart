@@ -7,8 +7,8 @@ class LoadingShimmer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = context.colorScheme;
-    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final ColorScheme colorScheme = context.colorScheme;
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Shimmer.fromColors(
       baseColor: isDark

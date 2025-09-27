@@ -272,7 +272,6 @@ class _CheckoutScreenState extends State<CheckoutScreen>
           builder: (context, state) {
             return CustomScrollView(
               slivers: [
-                // Modern App Bar
                 SliverAppBar(
                   expandedHeight: 120,
                   floating: false,
@@ -280,6 +279,7 @@ class _CheckoutScreenState extends State<CheckoutScreen>
                   elevation: 0,
                   backgroundColor: context.colorScheme.background,
                   foregroundColor: context.colorScheme.onBackground,
+                  surfaceTintColor: context.colorScheme.onBackground,
                   flexibleSpace: FlexibleSpaceBar(
                     title: Text(
                       'Checkout',
@@ -292,7 +292,6 @@ class _CheckoutScreenState extends State<CheckoutScreen>
                   ),
                 ),
 
-                // Content
                 SliverToBoxAdapter(
                   child: SlideTransition(
                     position: _slideAnimation,
@@ -527,6 +526,7 @@ class _CheckoutScreenState extends State<CheckoutScreen>
                                       ),
                                       child: DropdownButtonFormField<String>(
                                         value: _selectedPaymentMethod,
+
                                         decoration: const InputDecoration(
                                           border: InputBorder.none,
                                           contentPadding: EdgeInsets.symmetric(
@@ -549,31 +549,26 @@ class _CheckoutScreenState extends State<CheckoutScreen>
                                                   size: 20,
                                                 ),
                                                 const SizedBox(width: 12),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Text(
-                                                      method['title'],
-                                                      style: context
-                                                          .textTheme
-                                                          .titleMedium,
-                                                    ),
-                                                    Text(
-                                                      method['subtitle'],
-                                                      style: context
-                                                          .textTheme
-                                                          .bodySmall
-                                                          ?.copyWith(
-                                                            color: context
-                                                                .colorScheme
-                                                                .onSurface
-                                                                .withValues(
-                                                                  alpha: 0.6,
-                                                                ),
-                                                          ),
-                                                    ),
-                                                  ],
+                                                Text(
+                                                  method['title'],
+                                                  style: context
+                                                      .textTheme
+                                                      .titleMedium,
+                                                ),
+                                                const SizedBox(width: 12),
+                                                Text(
+                                                  method['subtitle'],
+                                                  style: context
+                                                      .textTheme
+                                                      .bodySmall
+                                                      ?.copyWith(
+                                                        color: context
+                                                            .colorScheme
+                                                            .onSurface
+                                                            .withValues(
+                                                              alpha: 0.6,
+                                                            ),
+                                                      ),
                                                 ),
                                               ],
                                             ),

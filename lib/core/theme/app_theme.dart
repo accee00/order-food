@@ -22,7 +22,7 @@ class AppTheme {
   static const Color darkOnSurface = Color(0xFFB0B0B0);
   static const Color darkAccent = Color(0xFFE17055);
   static const Color darkError = Color(0xFFE74C3C);
-
+  //light theme
   static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     brightness: Brightness.light,
