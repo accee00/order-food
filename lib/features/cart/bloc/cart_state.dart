@@ -26,6 +26,30 @@ class CartLoaded extends CartState {
     required this.total,
   });
 
+  CartLoaded copyWith({
+    List<CartItem>? items,
+    double? deliveryFee,
+    double? tax,
+  }) {
+    final List<CartItem> updatedItems = items ?? this.items;
+    final double updatedSubtotal = updatedItems.fold(
+      0,
+      (sum, item) => sum + item.menuItem.price * item.quantity,
+    );
+    final double updatedTax = tax ?? this.tax;
+    final double updatedDeliveryFee = deliveryFee ?? this.deliveryFee;
+    final double updatedTotal =
+        updatedSubtotal + updatedTax + updatedDeliveryFee;
+
+    return CartLoaded(
+      items: updatedItems,
+      subtotal: updatedSubtotal,
+      deliveryFee: updatedDeliveryFee,
+      tax: updatedTax,
+      total: updatedTotal,
+    );
+  }
+
   @override
   List<Object> get props => [items, subtotal, deliveryFee, tax, total];
 }

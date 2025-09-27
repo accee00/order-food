@@ -64,7 +64,7 @@ class OrderRepository {
       () => _updateOrderStatus(orderId, OrderStatus.confirmed),
     );
     Timer(
-      const Duration(seconds: 30),
+      const Duration(seconds: 10),
       () => _updateOrderStatus(orderId, OrderStatus.preparing),
     );
     Timer(

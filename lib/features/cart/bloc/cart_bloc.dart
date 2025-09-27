@@ -50,7 +50,18 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   ) async {
     try {
       await _respository.updateItem(event.item);
-      add(LoadCart());
+
+      if (state is CartLoaded) {
+        final currentState = state as CartLoaded;
+        final updatedItems = currentState.items.map((item) {
+          if (item.menuItem.id == event.item.menuItem.id) {
+            return event.item;
+          }
+          return item;
+        }).toList();
+
+        emit(currentState.copyWith(items: updatedItems));
+      }
     } catch (e) {
       emit(CartError('Failed to update cart item: ${e.toString()}'));
     }
@@ -62,7 +73,15 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   ) async {
     try {
       await _respository.removeItem(event.menuItemId, event.restaurantId);
-      add(LoadCart());
+
+      if (state is CartLoaded) {
+        final currentState = state as CartLoaded;
+        final updatedItems = currentState.items
+            .where((item) => item.menuItem.id != event.menuItemId)
+            .toList();
+
+        emit(currentState.copyWith(items: updatedItems));
+      }
     } catch (e) {
       emit(CartError('Failed to remove item from cart: ${e.toString()}'));
     }

@@ -20,7 +20,6 @@ class RestaurantBloc extends Bloc<RestaurantEvent, RestaurantState> {
     emit(RestaurantLoading());
     try {
       final List<Restaurant> restaurants = await _repository.getRestaurants();
-      print(restaurants);
       emit(RestaurantLoaded(restaurants));
     } catch (e) {
       emit(RestaurantError('Failed to load restaurants: ${e.toString()}'));
