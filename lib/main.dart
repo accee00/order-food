@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:order_food/core/bloc/app_bloc.dart';
 import 'package:order_food/core/bloc_provider_table/bloc_provider.dart';
 import 'package:order_food/core/di/di_imports.dart';
+import 'package:order_food/core/routes/app_routes_import.dart';
 import 'package:order_food/core/theme/app_theme.dart';
-import 'package:order_food/features/restaurant/presentation/view/main_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +27,8 @@ class MyApp extends StatelessWidget {
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           themeMode: state.isDarkMode ? ThemeMode.light : ThemeMode.dark,
-          home: const MainAppScreen(),
+          onGenerateRoute: (settings) => AppRoutes.onGenerateRoute(settings),
+          initialRoute: AppRoutes.initialRoute,
         );
       },
     );

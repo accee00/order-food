@@ -5,10 +5,11 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter_glass_morphism/flutter_glass_morphism.dart';
 import 'package:order_food/core/bloc/app_bloc.dart';
 import 'package:order_food/core/extension/build_extension.dart';
+import 'package:order_food/core/routes/app_routes_import.dart';
 import 'dart:io';
 
 import 'package:order_food/features/cart/bloc/cart_bloc.dart';
-import 'package:order_food/features/cart/presentation/view/cart_screen.dart';
+
 import 'package:order_food/features/order/bloc/order_bloc.dart';
 import 'package:order_food/features/order/presentation/view/order_history_screen.dart';
 import 'package:order_food/features/restaurant/presentation/view/home_screenn.dart';
@@ -172,13 +173,8 @@ class _MainAppScreenState extends State<MainAppScreen> {
                       Icons.shopping_cart_outlined,
                       color: colorScheme.onPrimaryContainer,
                     ),
-                    onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => const CartScreen(),
-                        ),
-                      );
-                    },
+                    onPressed: () =>
+                        Navigator.pushNamed(context, AppRoutes.cart),
                   ),
                   if (itemCount > 0)
                     Positioned(

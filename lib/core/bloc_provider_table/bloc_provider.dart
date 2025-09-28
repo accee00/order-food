@@ -9,7 +9,7 @@ class CustomBlocProviders {
   static get providers => [
     BlocProvider<AppBloc>(create: (_) => serviceLocator<AppBloc>()),
     BlocProvider<RestaurantBloc>(
-      create: (_) => serviceLocator<RestaurantBloc>(),
+      create: (_) => serviceLocator<RestaurantBloc>()..add(LoadRestaurants()),
     ),
     BlocProvider<CartBloc>(create: (_) => serviceLocator<CartBloc>()),
     BlocProvider<OrderBloc>(

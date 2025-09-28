@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:order_food/core/extension/build_extension.dart';
+import 'package:order_food/core/routes/app_routes_import.dart';
 import 'package:order_food/core/widgets/loading_shimmer.dart';
 import 'package:order_food/features/cart/bloc/cart_bloc.dart';
 import 'package:order_food/features/cart/presentation/widget/cart_item_card.dart';
-import 'package:order_food/features/order/presentation/view/check_out_screen.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
@@ -11,14 +12,14 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surfaceVariant,
+      backgroundColor: context.colorScheme.surfaceVariant,
       appBar: AppBar(
         title: const Text(
           'My Cart',
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: Theme.of(context).colorScheme.surface,
+        backgroundColor: context.colorScheme.surface,
         elevation: 0,
         actions: [
           BlocBuilder<CartBloc, CartState>(
@@ -103,7 +104,6 @@ class CartScreen extends StatelessWidget {
                   ),
                 ),
 
-                // order summary updates separately
                 BlocBuilder<CartBloc, CartState>(
                   buildWhen: (previous, current) =>
                       previous is CartLoaded &&
@@ -162,7 +162,7 @@ class CartScreen extends StatelessWidget {
   Widget _buildOrderSummary(BuildContext context, CartLoaded state) {
     return Container(
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surface,
+        color: context.colorScheme.surface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
         boxShadow: [
           BoxShadow(
@@ -188,21 +188,19 @@ class CartScreen extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => CheckoutScreen(
-                        cartItems: state.items,
-                        subtotal: state.subtotal,
-                        deliveryFee: state.deliveryFee,
-                        tax: state.tax,
-                        total: state.total,
-                      ),
-                    ),
-                  );
-                },
+                onPressed: () => Navigator.pushNamed(
+                  context,
+                  AppRoutes.checkout,
+                  arguments: CheckoutRouteArgs(
+                    cartItems: state.items,
+                    subtotal: state.subtotal,
+                    deliveryFee: state.deliveryFee,
+                    tax: state.tax,
+                    total: state.total,
+                  ),
+                ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  backgroundColor: context.colorScheme.primary,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
@@ -253,14 +251,11 @@ class CartScreen extends StatelessWidget {
           children: [
             const Icon(Icons.error_outline, size: 80, color: Colors.red),
             const SizedBox(height: 16),
-            Text(
-              'Error loading cart',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
+            Text('Error loading cart', style: context.textTheme.titleMedium),
             const SizedBox(height: 8),
             Text(
               message,
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: context.textTheme.bodyMedium,
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 20),
@@ -271,7 +266,7 @@ class CartScreen extends StatelessWidget {
               icon: const Icon(Icons.refresh),
               label: const Text('Retry'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.primary,
+                backgroundColor: context.colorScheme.primary,
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 24,
@@ -309,13 +304,13 @@ class CartScreen extends StatelessWidget {
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => Navigator.pop(context),
               child: const Text('Cancel'),
             ),
             ElevatedButton(
               onPressed: () {
                 context.read<CartBloc>().add(ClearCart());
-                Navigator.of(context).pop();
+                Navigator.pop(context);
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red,

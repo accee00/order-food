@@ -17,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _searchController = TextEditingController();
   @override
   void initState() {
-    context.read<RestaurantBloc>().add(LoadRestaurants());
+    // context.read<RestaurantBloc>().add(LoadRestaurants());
     super.initState();
   }
 
@@ -80,7 +80,8 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (context, state) {
         if (state is RestaurantLoading) {
           return const LoadingShimmer();
-        } else if (state is RestaurantLoaded) {
+        } else if (state is RestaurantLoaded ||
+            state is RestaurantDetailLoaded) {
           return _buildRestaurantContent(state.restaurants, colorScheme);
         } else if (state is RestaurantError) {
           return _buildErrorState(state.message, colorScheme);

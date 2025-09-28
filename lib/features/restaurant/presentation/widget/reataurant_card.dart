@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:order_food/core/extension/build_extension.dart';
+import 'package:order_food/core/routes/app_routes_import.dart';
 import 'package:order_food/features/restaurant/model/resturant.dart';
-import 'package:order_food/features/restaurant/presentation/view/restaurant_detail.dart';
 
 class RestaurantCard extends StatelessWidget {
   final Restaurant restaurant;
@@ -40,14 +40,11 @@ class RestaurantCard extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) =>
-                    RestaurantDetailScreen(restaurant: restaurant),
-              ),
-            );
-          },
+          onTap: () => Navigator.pushNamed(
+            context,
+            AppRoutes.restaurantDetail,
+            arguments: restaurant,
+          ),
           borderRadius: BorderRadius.circular(24),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

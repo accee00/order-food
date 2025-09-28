@@ -75,7 +75,7 @@ class MenuItemCard extends StatelessWidget {
                         );
                       },
                     ),
-                    // Subtle gradient overlay for better text contrast
+
                     Container(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
@@ -100,11 +100,9 @@ class MenuItemCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Top section - Name and Description
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Item Name with modern typography
                           Text(
                             menuItem.name,
                             style: textTheme.titleLarge?.copyWith(
@@ -116,7 +114,6 @@ class MenuItemCard extends StatelessWidget {
 
                           const SizedBox(height: 8),
 
-                          // Description with better line height
                           Text(
                             menuItem.description,
                             style: textTheme.bodyMedium?.copyWith(
@@ -132,7 +129,6 @@ class MenuItemCard extends StatelessWidget {
 
                           const SizedBox(height: 16),
 
-                          // Modern Allergen Tags
                           if (menuItem.allergens.isNotEmpty) ...[
                             Wrap(
                               spacing: 8,
@@ -186,7 +182,6 @@ class MenuItemCard extends StatelessWidget {
                         ],
                       ),
 
-                      // Bottom section - Price and Button
                       Padding(
                         padding: const EdgeInsets.only(top: 20),
                         child: Row(
@@ -224,7 +219,6 @@ class MenuItemCard extends StatelessWidget {
                               ),
                             ),
 
-                            // Modern Add Button
                             Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(16),
